@@ -42,10 +42,24 @@ const FeaturedPrograms = () => {
     };
   }, []);
   
-  // Get only featured programs (max 4)
-  const featuredPrograms = programs
-    .filter(program => program.featured || program.new)
-    .slice(0, 4);
+  // Get featured programs from Mondragon Unibertsitatea and Laboral Kutxa
+  const mondragonAndLaboralPrograms = programs
+    .filter(program => 
+      (program.provider === "Mondragon Unibertsitatea" || program.provider === "Laboral Kutxa") && 
+      (program.featured || program.new)
+    )
+    .slice(0, 2);
+  
+  // Get other featured programs to fill the remaining slots
+  const otherFeaturedPrograms = programs
+    .filter(program => 
+      (program.provider !== "Mondragon Unibertsitatea" && program.provider !== "Laboral Kutxa") && 
+      (program.featured || program.new)
+    )
+    .slice(0, 2);
+  
+  // Combine the two arrays to get 4 programs total
+  const featuredPrograms = [...mondragonAndLaboralPrograms, ...otherFeaturedPrograms];
 
   return (
     <section 
@@ -61,7 +75,7 @@ const FeaturedPrograms = () => {
               Industry-Recognized Microcredentials
             </h3>
             <p className="text-gray-600 max-w-2xl mb-4 md:mb-0">
-              Curated programs designed with top universities and industry experts to help professionals gain targeted skills.
+              Curated programs from Mondragon Unibertsitatea and Laboral Kutxa designed to help professionals gain targeted skills in cooperative business and ethical finance.
             </p>
           </div>
           <Button 

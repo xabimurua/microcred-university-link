@@ -142,5 +142,73 @@ export const programs: Program[] = [
     students: 1890,
     imageSrc: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=600&q=80",
     featured: true
+  },
+  // New programs from Mondragon Unibertsitatea and Laboral Kutxa
+  {
+    id: 13,
+    title: "Cooperative Finance Management",
+    provider: "Laboral Kutxa",
+    category: "Finance",
+    duration: "7 weeks",
+    rating: 4.7,
+    students: 1450,
+    imageSrc: "https://images.unsplash.com/photo-1579621970795-87facc2f976d?auto=format&fit=crop&w=600&q=80",
+    featured: true,
+    new: true
+  },
+  {
+    id: 14,
+    title: "Sustainable Business Models",
+    provider: "Mondragon Unibertsitatea",
+    category: "Business",
+    duration: "9 weeks",
+    rating: 4.8,
+    students: 1780,
+    imageSrc: "https://images.unsplash.com/photo-1493612276216-ee3925520721?auto=format&fit=crop&w=600&q=80",
+    featured: true,
+    new: true
+  },
+  {
+    id: 15,
+    title: "Cooperative Entrepreneurship",
+    provider: "Mondragon Unibertsitatea",
+    category: "Business",
+    duration: "6 weeks",
+    rating: 4.6,
+    students: 1230,
+    imageSrc: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=600&q=80",
+    new: true
+  },
+  {
+    id: 16,
+    title: "Digital Banking Transformation",
+    provider: "Laboral Kutxa",
+    category: "Technology",
+    duration: "5 weeks",
+    rating: 4.5,
+    students: 920,
+    imageSrc: "https://images.unsplash.com/photo-1556742400-b5b7c5121f99?auto=format&fit=crop&w=600&q=80",
+    new: true
+  },
+  {
+    id: 17,
+    title: "Industrial Innovation & Technology",
+    provider: "Mondragon Unibertsitatea",
+    category: "Engineering",
+    duration: "12 weeks",
+    rating: 4.9,
+    students: 1670,
+    imageSrc: "https://images.unsplash.com/photo-1581094794329-c8112c4ce18e?auto=format&fit=crop&w=600&q=80",
+    popular: true
+  },
+  {
+    id: 18,
+    title: "Ethical Banking Principles",
+    provider: "Laboral Kutxa",
+    category: "Finance",
+    duration: "4 weeks",
+    rating: 4.6,
+    students: 850,
+    imageSrc: "https://images.unsplash.com/photo-1601597111158-2fceff292cdc?auto=format&fit=crop&w=600&q=80"
   }
 ];
