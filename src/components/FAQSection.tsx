@@ -11,6 +11,12 @@ const FAQSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Immediately make content visible on load
+    if (sectionRef.current) {
+      sectionRef.current.classList.add("opacity-100");
+      sectionRef.current.classList.remove("opacity-0", "translate-y-8");
+    }
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -66,7 +72,7 @@ const FAQSection = () => {
       className="py-16 md:py-24 bg-white"
       ref={sectionRef}
     >
-      <div className="container px-4 mx-auto opacity-0 translate-y-8 transition-all duration-1000 ease-out">
+      <div className="container px-4 mx-auto opacity-100 transition-all duration-1000 ease-out">
         <div className="text-center mb-12">
           <h2 className="text-sm text-secondary font-semibold uppercase tracking-wider mb-2">FAQ</h2>
           <h3 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h3>
@@ -81,8 +87,8 @@ const FAQSection = () => {
               <AccordionItem 
                 key={index} 
                 value={`item-${index}`}
-                className="border-b border-gray-200 py-2 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="border-b border-gray-200 py-2"
+                style={{ animation: `fadeIn 0.5s ease-out forwards ${index * 100}ms` }}
               >
                 <AccordionTrigger className="text-lg font-medium text-left hover:no-underline">
                   {faq.question}

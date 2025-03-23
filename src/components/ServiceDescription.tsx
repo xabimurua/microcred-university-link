@@ -7,6 +7,12 @@ const ServiceDescription = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    // Immediately make content visible on load
+    if (sectionRef.current) {
+      sectionRef.current.classList.add("opacity-100");
+      sectionRef.current.classList.remove("opacity-0", "translate-y-8");
+    }
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -62,7 +68,7 @@ const ServiceDescription = () => {
       className="py-16 md:py-24 bg-white" 
       ref={sectionRef}
     >
-      <div className="container px-4 mx-auto opacity-0 translate-y-8 transition-all duration-1000 ease-out">
+      <div className="container px-4 mx-auto opacity-100 transition-all duration-1000 ease-out">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-sm text-secondary font-semibold uppercase tracking-wider mb-3">Our Services</h2>
           <h3 className="text-3xl md:text-4xl font-bold mb-6 text-balance">
@@ -78,8 +84,8 @@ const ServiceDescription = () => {
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="flex gap-5 p-6 rounded-xl border border-gray-100 bg-white hover-lift animate-scale-in"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="flex gap-5 p-6 rounded-xl border border-gray-100 bg-white hover-lift"
+              style={{ animation: `fadeIn 0.5s ease-out forwards ${index * 100}ms` }}
             >
               <div className="w-12 h-12 flex items-center justify-center bg-primary/5 text-secondary rounded-lg flex-shrink-0">
                 {service.icon}

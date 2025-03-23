@@ -7,6 +7,12 @@ const Hero = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    // Immediately make content visible on load
+    if (heroRef.current) {
+      heroRef.current.classList.add("opacity-100");
+      heroRef.current.classList.remove("opacity-0", "translate-y-12");
+    }
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -40,10 +46,10 @@ const Hero = () => {
 
       <div 
         ref={heroRef}
-        className="container px-4 mx-auto transform opacity-0 translate-y-12 transition-all duration-1000 ease-out"
+        className="container px-4 mx-auto opacity-100 transition-all duration-1000 ease-out"
       >
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block mb-6 px-4 py-1.5 bg-primary/5 rounded-full text-primary/80 font-medium text-sm animate-fade-in">
+          <div className="inline-block mb-6 px-4 py-1.5 bg-primary/5 rounded-full text-primary/80 font-medium text-sm">
             Connecting Education with Industry
           </div>
           
@@ -55,7 +61,7 @@ const Hero = () => {
             Industry-recognized credentials that help professionals gain specific skills and companies find qualified talent.
           </p>
           
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16 animate-slide-up" style={{ animationDelay: "300ms" }}>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-16">
             <Button size="lg" className="bg-accent hover:bg-accent/90 gap-2 text-white shadow-lg shadow-accent/20">
               Browse Programs <ArrowRight size={16} />
             </Button>
@@ -104,8 +110,8 @@ const FeatureCard = ({
 }) => {
   return (
     <div 
-      className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover-lift overflow-hidden animate-scale-in"
-      style={{ animationDelay: `${delay}ms` }}
+      className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover-lift overflow-hidden"
+      style={{ animation: `fadeIn 0.5s ease-out forwards ${delay}ms` }}
     >
       <div className="flex items-start gap-4">
         <div className="p-3 rounded-lg bg-primary/5">

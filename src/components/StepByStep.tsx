@@ -9,6 +9,12 @@ const StepByStep = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    // Immediately make content visible on load
+    if (sectionRef.current) {
+      sectionRef.current.classList.add("opacity-100");
+      sectionRef.current.classList.remove("opacity-0", "translate-y-8");
+    }
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -68,7 +74,7 @@ const StepByStep = () => {
       className="py-16 md:py-24 bg-gray-50"
       ref={sectionRef}
     >
-      <div className="container px-4 mx-auto opacity-0 translate-y-8 transition-all duration-1000 ease-out">
+      <div className="container px-4 mx-auto opacity-100 transition-all duration-1000 ease-out">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-sm text-secondary font-semibold uppercase tracking-wider mb-3">How It Works</h2>
           <h3 className="text-3xl md:text-4xl font-bold mb-6 text-balance">
@@ -90,8 +96,8 @@ const StepByStep = () => {
                 key={index} 
                 className={`flex flex-col md:flex-row gap-6 md:gap-10 items-center ${
                   index % 2 === 1 ? 'md:flex-row-reverse' : ''
-                } animate-fade-in`}
-                style={{ animationDelay: `${step.delay}ms` }}
+                }`}
+                style={{ animation: `fadeIn 0.5s ease-out forwards ${step.delay}ms` }}
               >
                 <div className="w-16 h-16 flex items-center justify-center bg-accent text-white rounded-full z-10 flex-shrink-0 shadow-lg shadow-accent/20">
                   {step.icon}
@@ -109,7 +115,7 @@ const StepByStep = () => {
           </div>
         </div>
         
-        <div className="mt-16 text-center animate-fade-in" style={{ animationDelay: "800ms" }}>
+        <div className="mt-16 text-center" style={{ animation: `fadeIn 0.5s ease-out forwards 800ms` }}>
           <p className="text-gray-600 text-lg mb-6">
             Ready to take the next step in your professional journey?
           </p>

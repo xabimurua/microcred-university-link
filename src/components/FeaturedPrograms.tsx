@@ -10,6 +10,12 @@ const FeaturedPrograms = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
+    // Immediately make content visible on load
+    if (sectionRef.current) {
+      sectionRef.current.classList.add("opacity-100");
+      sectionRef.current.classList.remove("opacity-0", "translate-y-8");
+    }
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -47,7 +53,7 @@ const FeaturedPrograms = () => {
       className="py-16 md:py-24 bg-white relative"
       ref={sectionRef}
     >
-      <div className="container px-4 mx-auto opacity-0 translate-y-8 transition-all duration-1000 ease-out">
+      <div className="container px-4 mx-auto opacity-100 transition-all duration-1000 ease-out">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
           <div>
             <h2 className="text-sm text-secondary font-semibold uppercase tracking-wider mb-2">Featured Programs</h2>
