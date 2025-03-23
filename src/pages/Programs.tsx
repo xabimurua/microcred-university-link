@@ -10,15 +10,25 @@ import {
   Star, 
   Clock, 
   Briefcase, 
-  Bookmark, 
   ChevronDown,
-  X
+  X,
+  Bookmark,
+  GraduationCap,
+  UserCheck
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import ProgramCard from "@/components/ProgramCard";
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext,
+  PaginationPrevious 
+} from "@/components/ui/pagination";
 
 // Program data (in real app, this would come from an API)
 import { programs } from "@/data/programs";
@@ -28,6 +38,9 @@ const Programs = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedDuration, setSelectedDuration] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const programsPerPage = 9; // Show 9 programs per page
   const [activeFilters, setActiveFilters] = useState<{
     category: string | null,
     duration: string | null,
@@ -38,27 +51,43 @@ const Programs = () => {
     provider: null
   });
 
-  // Filter programs based on search query and filters
-  const filteredPrograms = programs.filter(program => {
-    // Search filter
-    const matchesSearch = searchQuery === "" || 
-      program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      program.provider.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    // Category filter
-    const matchesCategory = !activeFilters.category || 
-      program.category === activeFilters.category;
-    
-    // Duration filter
-    const matchesDuration = !activeFilters.duration || 
-      program.duration === activeFilters.duration;
-    
-    // Provider filter
-    const matchesProvider = !activeFilters.provider || 
-      program.provider === activeFilters.provider;
-    
-    return matchesSearch && matchesCategory && matchesDuration && matchesProvider;
-  });
+  // Filter programs based on search query, filters, and active tab
+  const getFilteredPrograms = () => {
+    return programs.filter(program => {
+      // Search filter
+      const matchesSearch = searchQuery === "" || 
+        program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        program.provider.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      // Category filter
+      const matchesCategory = !activeFilters.category || 
+        program.category === activeFilters.category;
+      
+      // Duration filter
+      const matchesDuration = !activeFilters.duration || 
+        program.duration === activeFilters.duration;
+      
+      // Provider filter
+      const matchesProvider = !activeFilters.provider || 
+        program.provider === activeFilters.provider;
+      
+      // Tab filter
+      const matchesTab = activeTab === "all" || 
+        (activeTab === "featured" && program.featured) || 
+        (activeTab === "new" && program.new) || 
+        (activeTab === "popular" && program.popular);
+      
+      return matchesSearch && matchesCategory && matchesDuration && matchesProvider && matchesTab;
+    });
+  };
+
+  const filteredPrograms = getFilteredPrograms();
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredPrograms.length / programsPerPage);
+  const indexOfLastProgram = currentPage * programsPerPage;
+  const indexOfFirstProgram = indexOfLastProgram - programsPerPage;
+  const currentPrograms = filteredPrograms.slice(indexOfFirstProgram, indexOfLastProgram);
 
   const categories = [...new Set(programs.map(program => program.category))];
   const durations = [...new Set(programs.map(program => program.duration))];
@@ -66,6 +95,7 @@ const Programs = () => {
 
   // Apply filter
   const applyFilter = (type: 'category' | 'duration' | 'provider', value: string | null) => {
+    setCurrentPage(1); // Reset to first page when filter changes
     setActiveFilters(prev => ({
       ...prev,
       [type]: value
@@ -80,6 +110,22 @@ const Programs = () => {
       provider: null
     });
     setSearchQuery("");
+    setCurrentPage(1);
+  };
+
+  // Handle tab change
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setCurrentPage(1); // Reset to first page when tab changes
+  };
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of results
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
@@ -150,7 +196,10 @@ const Programs = () => {
                     placeholder="Search programs, skills, or providers..."
                     className="pl-10 py-6 h-auto"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1); // Reset to first page when search changes
+                    }}
                   />
                   {searchQuery && (
                     <button 
@@ -173,6 +222,43 @@ const Programs = () => {
             </div>
           </div>
         </section>
+        
+        {/* Program stats */}
+        <div className="bg-white border-b border-gray-100 py-6">
+          <div className="container px-4 mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="flex items-center gap-3">
+                <div className="bg-primary/10 p-3 rounded-full">
+                  <GraduationCap className="text-primary" size={24} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{programs.length}</div>
+                  <div className="text-sm text-gray-500">Total Programs</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="bg-secondary/10 p-3 rounded-full">
+                  <Bookmark className="text-secondary" size={24} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{providers.length}</div>
+                  <div className="text-sm text-gray-500">Trusted Providers</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="bg-accent/10 p-3 rounded-full">
+                  <UserCheck className="text-accent" size={24} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">
+                    {programs.reduce((total, program) => total + program.students, 0).toLocaleString()}
+                  </div>
+                  <div className="text-sm text-gray-500">Enrolled Students</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         
         {/* Active filters */}
         {(activeFilters.category || activeFilters.duration || activeFilters.provider || searchQuery) && (
@@ -317,7 +403,7 @@ const Programs = () => {
               
               {/* Programs grid */}
               <div className="flex-grow">
-                <Tabs defaultValue="all" className="mb-8">
+                <Tabs defaultValue="all" value={activeTab} onValueChange={handleTabChange} className="mb-8">
                   <TabsList>
                     <TabsTrigger value="all">All Programs</TabsTrigger>
                     <TabsTrigger value="featured">Featured</TabsTrigger>
@@ -337,18 +423,60 @@ const Programs = () => {
                 ) : (
                   <>
                     <p className="text-gray-500 mb-6">
-                      Showing {filteredPrograms.length} programs
+                      Showing {currentPrograms.length} of {filteredPrograms.length} programs
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {filteredPrograms.map((program, index) => (
+                      {currentPrograms.map((program, index) => (
                         <ProgramCard 
                           key={program.id} 
                           program={program} 
                           index={index}
+                          showBookmark={true}
                         />
                       ))}
                     </div>
+                    
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className="mt-12">
+                        <Pagination>
+                          <PaginationContent>
+                            {currentPage > 1 && (
+                              <PaginationItem>
+                                <PaginationPrevious 
+                                  onClick={() => handlePageChange(currentPage - 1)} 
+                                  href="#"
+                                  aria-label="Go to previous page"
+                                />
+                              </PaginationItem>
+                            )}
+                            
+                            {[...Array(totalPages)].map((_, index) => (
+                              <PaginationItem key={index}>
+                                <PaginationLink
+                                  onClick={() => handlePageChange(index + 1)}
+                                  isActive={currentPage === index + 1}
+                                  href="#"
+                                >
+                                  {index + 1}
+                                </PaginationLink>
+                              </PaginationItem>
+                            ))}
+                            
+                            {currentPage < totalPages && (
+                              <PaginationItem>
+                                <PaginationNext 
+                                  onClick={() => handlePageChange(currentPage + 1)} 
+                                  href="#"
+                                  aria-label="Go to next page"
+                                />
+                              </PaginationItem>
+                            )}
+                          </PaginationContent>
+                        </Pagination>
+                      </div>
+                    )}
                   </>
                 )}
               </div>
