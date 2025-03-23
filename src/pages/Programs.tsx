@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
@@ -14,7 +13,8 @@ import {
   X,
   Bookmark,
   GraduationCap,
-  UserCheck
+  UserCheck,
+  SlidersHorizontal
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -29,6 +29,14 @@ import {
   PaginationNext,
   PaginationPrevious 
 } from "@/components/ui/pagination";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 
 // Program data (in real app, this would come from an API)
 import { programs } from "@/data/programs";
@@ -50,6 +58,7 @@ const Programs = () => {
     duration: null,
     provider: null
   });
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter programs based on search query, filters, and active tab
   const getFilteredPrograms = () => {
@@ -161,12 +170,98 @@ const Programs = () => {
     };
   }, []);
 
+  const FiltersList = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="font-semibold mb-3 flex items-center gap-2 text-primary">
+          <Briefcase size={16} />
+          Categories
+        </h3>
+        <div className="grid grid-cols-1 gap-1.5">
+          {categories.map(category => (
+            <button
+              key={category}
+              className={cn(
+                "text-sm py-1.5 px-3 rounded-md block w-full text-left transition-colors flex items-center justify-between",
+                activeFilters.category === category 
+                  ? "bg-primary/10 text-primary font-medium" 
+                  : "hover:bg-gray-100"
+              )}
+              onClick={() => applyFilter('category', category)}
+            >
+              <span>{category}</span>
+              {activeFilters.category === category && (
+                <span className="w-2 h-2 bg-primary rounded-full"></span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <Separator />
+      
+      <div>
+        <h3 className="font-semibold mb-3 flex items-center gap-2 text-primary">
+          <Clock size={16} />
+          Duration
+        </h3>
+        <div className="grid grid-cols-1 gap-1.5">
+          {durations.map(duration => (
+            <button
+              key={duration}
+              className={cn(
+                "text-sm py-1.5 px-3 rounded-md block w-full text-left transition-colors flex items-center justify-between",
+                activeFilters.duration === duration 
+                  ? "bg-primary/10 text-primary font-medium" 
+                  : "hover:bg-gray-100"
+              )}
+              onClick={() => applyFilter('duration', duration)}
+            >
+              <span>{duration}</span>
+              {activeFilters.duration === duration && (
+                <span className="w-2 h-2 bg-primary rounded-full"></span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <Separator />
+      
+      <div>
+        <h3 className="font-semibold mb-3 flex items-center gap-2 text-primary">
+          <Star size={16} />
+          Providers
+        </h3>
+        <div className="grid grid-cols-1 gap-1.5">
+          {providers.map(provider => (
+            <button
+              key={provider}
+              className={cn(
+                "text-sm py-1.5 px-3 rounded-md block w-full text-left transition-colors flex items-center justify-between",
+                activeFilters.provider === provider 
+                  ? "bg-primary/10 text-primary font-medium" 
+                  : "hover:bg-gray-100"
+              )}
+              onClick={() => applyFilter('provider', provider)}
+            >
+              <span>{provider}</span>
+              {activeFilters.provider === provider && (
+                <span className="w-2 h-2 bg-primary rounded-full"></span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow pt-20">
         {/* Header */}
-        <section className="bg-primary/5 py-12 md:py-16">
+        <section className="bg-gradient-to-b from-primary/5 to-transparent py-12 md:py-16">
           <div className="container px-4 mx-auto">
             <Breadcrumb className="mb-6">
               <BreadcrumbItem>
@@ -179,7 +274,7 @@ const Programs = () => {
             </Breadcrumb>
             
             <div className="max-w-3xl">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Discover Microcredential Programs
               </h1>
               <p className="text-gray-600 text-lg mb-8">
@@ -189,31 +284,66 @@ const Programs = () => {
             </div>
             
             <div className="flex flex-col md:flex-row gap-4 max-w-4xl">
-              <div className="flex-grow">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-                  <Input
-                    placeholder="Search programs, skills, or providers..."
-                    className="pl-10 py-6 h-auto"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setCurrentPage(1); // Reset to first page when search changes
-                    }}
-                  />
-                  {searchQuery && (
-                    <button 
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      onClick={() => setSearchQuery("")}
-                    >
-                      <X size={16} />
-                    </button>
-                  )}
-                </div>
+              <div className="flex-grow relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  placeholder="Search programs, skills, or providers..."
+                  className="pl-10 py-6 h-auto rounded-full"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setCurrentPage(1); // Reset to first page when search changes
+                  }}
+                />
+                {searchQuery && (
+                  <button 
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    onClick={() => setSearchQuery("")}
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
+              
+              {/* Mobile filters button */}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="md:hidden flex items-center gap-2 h-auto py-2 px-4"
+                  >
+                    <SlidersHorizontal size={18} />
+                    Filters
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+                  <SheetHeader>
+                    <SheetTitle>Filters</SheetTitle>
+                  </SheetHeader>
+                  <div className="mt-6">
+                    <FiltersList />
+                  </div>
+                  
+                  {(activeFilters.category || activeFilters.duration || activeFilters.provider) && (
+                    <div className="mt-6">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="w-full"
+                        onClick={clearFilters}
+                      >
+                        Clear all filters
+                      </Button>
+                    </div>
+                  )}
+                </SheetContent>
+              </Sheet>
+              
+              {/* Desktop filter button */}
               <Button 
                 variant="outline" 
-                className="flex items-center gap-2 h-auto py-2 px-4"
+                className="hidden md:flex items-center gap-2 h-auto py-2 px-4 rounded-full"
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
               >
                 <Filter size={18} />
                 Filters
@@ -227,7 +357,7 @@ const Programs = () => {
         <div className="bg-white border-b border-gray-100 py-6">
           <div className="container px-4 mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 p-4 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="bg-primary/10 p-3 rounded-full">
                   <GraduationCap className="text-primary" size={24} />
                 </div>
@@ -236,7 +366,7 @@ const Programs = () => {
                   <div className="text-sm text-gray-500">Total Programs</div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 p-4 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="bg-secondary/10 p-3 rounded-full">
                   <Bookmark className="text-secondary" size={24} />
                 </div>
@@ -245,7 +375,7 @@ const Programs = () => {
                   <div className="text-sm text-gray-500">Trusted Providers</div>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 p-4 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="bg-accent/10 p-3 rounded-full">
                   <UserCheck className="text-accent" size={24} />
                 </div>
@@ -268,39 +398,39 @@ const Programs = () => {
                 <span className="text-sm text-gray-500">Active filters:</span>
                 
                 {searchQuery && (
-                  <span className="bg-primary/5 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                    "{searchQuery}"
-                    <button onClick={() => setSearchQuery("")}>
-                      <X size={14} className="ml-1" />
+                  <Badge variant="outline" className="px-3 py-1 flex items-center gap-1">
+                    Search: "{searchQuery}"
+                    <button onClick={() => setSearchQuery("")} className="ml-1">
+                      <X size={14} />
                     </button>
-                  </span>
+                  </Badge>
                 )}
                 
                 {activeFilters.category && (
-                  <span className="bg-primary/5 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                    {activeFilters.category}
-                    <button onClick={() => applyFilter('category', null)}>
-                      <X size={14} className="ml-1" />
+                  <Badge variant="outline" className="px-3 py-1 flex items-center gap-1">
+                    Category: {activeFilters.category}
+                    <button onClick={() => applyFilter('category', null)} className="ml-1">
+                      <X size={14} />
                     </button>
-                  </span>
+                  </Badge>
                 )}
                 
                 {activeFilters.duration && (
-                  <span className="bg-primary/5 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                    {activeFilters.duration}
-                    <button onClick={() => applyFilter('duration', null)}>
-                      <X size={14} className="ml-1" />
+                  <Badge variant="outline" className="px-3 py-1 flex items-center gap-1">
+                    Duration: {activeFilters.duration}
+                    <button onClick={() => applyFilter('duration', null)} className="ml-1">
+                      <X size={14} />
                     </button>
-                  </span>
+                  </Badge>
                 )}
                 
                 {activeFilters.provider && (
-                  <span className="bg-primary/5 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-1">
-                    {activeFilters.provider}
-                    <button onClick={() => applyFilter('provider', null)}>
-                      <X size={14} className="ml-1" />
+                  <Badge variant="outline" className="px-3 py-1 flex items-center gap-1">
+                    Provider: {activeFilters.provider}
+                    <button onClick={() => applyFilter('provider', null)} className="ml-1">
+                      <X size={14} />
                     </button>
-                  </span>
+                  </Badge>
                 )}
                 
                 <Button 
@@ -321,94 +451,23 @@ const Programs = () => {
           className="py-12 md:py-16"
           ref={sectionRef}
         >
-          <div className="container px-4 mx-auto opacity-0 translate-y-8 transition-all duration-1000 ease-out">
+          <div className="container px-4 mx-auto transition-all duration-1000 ease-out">
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Filters sidebar */}
-              <div className="w-full md:w-64 shrink-0">
-                <div className="sticky top-24 space-y-8">
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      <Briefcase size={16} />
-                      Categories
-                    </h3>
-                    <div className="space-y-2">
-                      {categories.map(category => (
-                        <button
-                          key={category}
-                          className={cn(
-                            "text-sm py-1 px-2 rounded-md block w-full text-left transition-colors",
-                            activeFilters.category === category 
-                              ? "bg-primary/10 text-primary font-medium" 
-                              : "hover:bg-gray-100"
-                          )}
-                          onClick={() => applyFilter('category', category)}
-                        >
-                          {category}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      <Clock size={16} />
-                      Duration
-                    </h3>
-                    <div className="space-y-2">
-                      {durations.map(duration => (
-                        <button
-                          key={duration}
-                          className={cn(
-                            "text-sm py-1 px-2 rounded-md block w-full text-left transition-colors",
-                            activeFilters.duration === duration 
-                              ? "bg-primary/10 text-primary font-medium" 
-                              : "hover:bg-gray-100"
-                          )}
-                          onClick={() => applyFilter('duration', duration)}
-                        >
-                          {duration}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      <Star size={16} />
-                      Providers
-                    </h3>
-                    <div className="space-y-2">
-                      {providers.map(provider => (
-                        <button
-                          key={provider}
-                          className={cn(
-                            "text-sm py-1 px-2 rounded-md block w-full text-left transition-colors",
-                            activeFilters.provider === provider 
-                              ? "bg-primary/10 text-primary font-medium" 
-                              : "hover:bg-gray-100"
-                          )}
-                          onClick={() => applyFilter('provider', provider)}
-                        >
-                          {provider}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+              {/* Filters sidebar - Desktop */}
+              <div className="hidden md:block w-64 shrink-0">
+                <div className="sticky top-24 space-y-8 bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
+                  <FiltersList />
                 </div>
               </div>
               
               {/* Programs grid */}
               <div className="flex-grow">
                 <Tabs defaultValue="all" value={activeTab} onValueChange={handleTabChange} className="mb-8">
-                  <TabsList>
-                    <TabsTrigger value="all">All Programs</TabsTrigger>
-                    <TabsTrigger value="featured">Featured</TabsTrigger>
-                    <TabsTrigger value="new">New</TabsTrigger>
-                    <TabsTrigger value="popular">Popular</TabsTrigger>
+                  <TabsList className="bg-gray-100/70 p-1 rounded-full">
+                    <TabsTrigger value="all" className="rounded-full data-[state=active]:bg-white">All Programs</TabsTrigger>
+                    <TabsTrigger value="featured" className="rounded-full data-[state=active]:bg-white">Featured</TabsTrigger>
+                    <TabsTrigger value="new" className="rounded-full data-[state=active]:bg-white">New</TabsTrigger>
+                    <TabsTrigger value="popular" className="rounded-full data-[state=active]:bg-white">Popular</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 
