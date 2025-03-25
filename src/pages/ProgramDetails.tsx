@@ -1,11 +1,9 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { programs } from "@/data/programs";
 import { 
-  ArrowLeft, 
   Star, 
   Clock, 
   Users, 
@@ -203,31 +201,10 @@ const ProgramDetails = () => {
         {/* Hero Section */}
         <section className="bg-gradient-to-b from-primary/5 to-transparent py-8">
           <div className="container px-4 mx-auto">
-            <Breadcrumb className="mb-6">
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/">Home</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink href="/programs">Programs</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink>{program.title}</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
             
             <div className="flex flex-col lg:flex-row gap-8">
               {/* Left Content */}
               <div className="lg:w-2/3">
-                <Link 
-                  to="/programs" 
-                  className="inline-flex items-center text-sm text-gray-600 hover:text-primary mb-4"
-                >
-                  <ArrowLeft size={16} className="mr-1" />
-                  Back to programs
-                </Link>
-                
                 <h1 className="text-3xl md:text-4xl font-bold mb-3">{program.title}</h1>
                 
                 <div className="flex flex-wrap items-center gap-3 mb-4">
