@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Star, Bookmark, Clock, Users, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface ProgramCardProps {
   program: Program;
@@ -22,6 +22,8 @@ interface ProgramCardProps {
 }
 
 const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps) => {
+  const navigate = useNavigate();
+  
   const handleBookmark = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -32,11 +34,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
   };
   
   const handleViewProgram = () => {
-    // In a real app, this would navigate to the program details page
-    toast({
-      title: "Program Selected",
-      description: `You selected ${program.title}.`,
-    });
+    navigate(`/programs/${program.id}`);
   };
 
   return (
