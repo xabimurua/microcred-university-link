@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,6 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
@@ -44,11 +42,10 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <NavLink to="/" currentPath={location.pathname}>Home</NavLink>
           <NavLink to="/programs" currentPath={location.pathname}>Programs</NavLink>
-          <NavLink to="#for-companies" currentPath={location.pathname}>For Companies</NavLink>
+          <NavLink to="/for-companies" currentPath={location.pathname}>For Companies</NavLink>
           <NavLink to="#about" currentPath={location.pathname}>About</NavLink>
         </nav>
 
@@ -61,7 +58,6 @@ const Navbar = () => {
           </Button>
         </div>
 
-        {/* Mobile Menu Button */}
         <button 
           className="md:hidden text-primary"
           onClick={toggleMobileMenu}
@@ -71,7 +67,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
       <div 
         className={cn(
           "md:hidden fixed inset-0 top-[60px] bg-white z-40 transition-all duration-300 ease-in-out",
@@ -83,7 +78,7 @@ const Navbar = () => {
         <div className="container flex flex-col p-6 space-y-6 animate-fade-in">
           <MobileNavLink to="/" currentPath={location.pathname}>Home</MobileNavLink>
           <MobileNavLink to="/programs" currentPath={location.pathname}>Programs</MobileNavLink>
-          <MobileNavLink to="#for-companies" currentPath={location.pathname}>For Companies</MobileNavLink>
+          <MobileNavLink to="/for-companies" currentPath={location.pathname}>For Companies</MobileNavLink>
           <MobileNavLink to="#about" currentPath={location.pathname}>About</MobileNavLink>
           
           <div className="pt-6 border-t border-gray-100 flex flex-col space-y-4">
