@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
@@ -37,9 +37,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-
-// Program data (in real app, this would come from an API)
-import { programs } from "@/data/programs";
+import { supabase } from "@/integrations/supabase/client";
 
 const Programs = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,7 +46,7 @@ const Programs = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeTab, setActiveTab] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const programsPerPage = 9; // Show 9 programs per page
+  const programsPerPage = 9;
   const [activeFilters, setActiveFilters] = useState<{
     category: string | null,
     duration: string | null,
@@ -59,28 +57,41 @@ const Programs = () => {
     provider: null
   });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [programs, setPrograms] = useState([]);
 
-  // Filter programs based on search query, filters, and active tab
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('courses')
+          .select('*')
+          .order('created_at', { ascending: false });
+          
+        if (error) throw error;
+        setPrograms(data || []);
+      } catch (error) {
+        console.error('Error fetching programs:', error);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
+
   const getFilteredPrograms = () => {
     return programs.filter(program => {
-      // Search filter
       const matchesSearch = searchQuery === "" || 
         program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         program.provider.toLowerCase().includes(searchQuery.toLowerCase());
       
-      // Category filter
       const matchesCategory = !activeFilters.category || 
         program.category === activeFilters.category;
       
-      // Duration filter
       const matchesDuration = !activeFilters.duration || 
         program.duration === activeFilters.duration;
       
-      // Provider filter
       const matchesProvider = !activeFilters.provider || 
         program.provider === activeFilters.provider;
       
-      // Tab filter
       const matchesTab = activeTab === "all" || 
         (activeTab === "featured" && program.featured) || 
         (activeTab === "new" && program.new) || 
@@ -92,7 +103,6 @@ const Programs = () => {
 
   const filteredPrograms = getFilteredPrograms();
   
-  // Calculate pagination
   const totalPages = Math.ceil(filteredPrograms.length / programsPerPage);
   const indexOfLastProgram = currentPage * programsPerPage;
   const indexOfFirstProgram = indexOfLastProgram - programsPerPage;
@@ -102,16 +112,14 @@ const Programs = () => {
   const durations = [...new Set(programs.map(program => program.duration))];
   const providers = [...new Set(programs.map(program => program.provider))];
 
-  // Apply filter
   const applyFilter = (type: 'category' | 'duration' | 'provider', value: string | null) => {
-    setCurrentPage(1); // Reset to first page when filter changes
+    setCurrentPage(1);
     setActiveFilters(prev => ({
       ...prev,
       [type]: value
     }));
   };
 
-  // Clear all filters
   const clearFilters = () => {
     setActiveFilters({
       category: null,
@@ -122,27 +130,22 @@ const Programs = () => {
     setCurrentPage(1);
   };
 
-  // Handle tab change
   const handleTabChange = (value: string) => {
     setActiveTab(value);
-    setCurrentPage(1); // Reset to first page when tab changes
+    setCurrentPage(1);
   };
 
-  // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // Scroll to top of results
     if (sectionRef.current) {
       sectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   useEffect(() => {
-    // Scroll to top when page loads
     window.scrollTo(0, 0);
   }, []);
 
-  // Animation for items
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -260,7 +263,6 @@ const Programs = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow pt-20">
-        {/* Header */}
         <section className="bg-gradient-to-b from-primary/5 to-transparent py-12 md:py-16">
           <div className="container px-4 mx-auto">
             <Breadcrumb className="mb-6">
@@ -292,7 +294,7 @@ const Programs = () => {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    setCurrentPage(1); // Reset to first page when search changes
+                    setCurrentPage(1);
                   }}
                 />
                 {searchQuery && (
@@ -305,7 +307,6 @@ const Programs = () => {
                 )}
               </div>
               
-              {/* Mobile filters button */}
               <Sheet>
                 <SheetTrigger asChild>
                   <Button 
@@ -339,7 +340,6 @@ const Programs = () => {
                 </SheetContent>
               </Sheet>
               
-              {/* Desktop filter button */}
               <Button 
                 variant="outline" 
                 className="hidden md:flex items-center gap-2 h-auto py-2 px-4 rounded-full"
@@ -353,7 +353,6 @@ const Programs = () => {
           </div>
         </section>
         
-        {/* Program stats */}
         <div className="bg-white border-b border-gray-100 py-6">
           <div className="container px-4 mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -390,7 +389,6 @@ const Programs = () => {
           </div>
         </div>
         
-        {/* Active filters */}
         {(activeFilters.category || activeFilters.duration || activeFilters.provider || searchQuery) && (
           <div className="bg-white border-b border-gray-100 py-3">
             <div className="container px-4 mx-auto">
@@ -446,21 +444,18 @@ const Programs = () => {
           </div>
         )}
         
-        {/* Main content */}
         <section 
           className="py-12 md:py-16"
           ref={sectionRef}
         >
           <div className="container px-4 mx-auto transition-all duration-1000 ease-out">
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Filters sidebar - Desktop */}
               <div className="hidden md:block w-64 shrink-0">
                 <div className="sticky top-24 space-y-8 bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
                   <FiltersList />
                 </div>
               </div>
               
-              {/* Programs grid */}
               <div className="flex-grow">
                 <Tabs defaultValue="all" value={activeTab} onValueChange={handleTabChange} className="mb-8">
                   <TabsList className="bg-gray-100/70 p-1 rounded-full">
@@ -496,7 +491,6 @@ const Programs = () => {
                       ))}
                     </div>
                     
-                    {/* Pagination */}
                     {totalPages > 1 && (
                       <div className="mt-12">
                         <Pagination>

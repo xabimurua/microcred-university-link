@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Star, Bookmark, Clock, Users, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,10 +14,16 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router-dom";
 
 interface ProgramCardProps {
-  program: Program;
+  program: {
+    id: string;
+    title: string;
+    description?: string;
+    provider: string;
+    category: string;
+    duration: string;
+  };
   index: number;
   showBookmark?: boolean;
 }
