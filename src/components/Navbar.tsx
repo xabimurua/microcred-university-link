@@ -2,12 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/components/AuthProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { LogOut, User } from "lucide-react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +36,11 @@ const Navbar = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate("/");
+  };
 
   return (
     <header 
@@ -50,12 +66,41 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="outline" className="transition-standard">
-            Log In
-          </Button>
-          <Button className="bg-accent hover:bg-accent/90 transition-standard">
-            Get Started
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback>
+                      {user.email?.[0].toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Cerrar Sesión</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button 
+                variant="outline" 
+                className="transition-standard"
+                onClick={() => navigate("/auth")}
+              >
+                Iniciar Sesión
+              </Button>
+              <Button 
+                className="bg-accent hover:bg-accent/90 transition-standard"
+                onClick={() => navigate("/auth")}
+              >
+                Registrarse
+              </Button>
+            </>
+          )}
         </div>
 
         <button 
