@@ -1,9 +1,9 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Star, Bookmark, Clock, Users, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Program } from "@/data/programs";
 import { 
   Card,
   CardContent,
@@ -17,12 +17,18 @@ import { toast } from "@/hooks/use-toast";
 
 interface ProgramCardProps {
   program: {
-    id: string;
+    id: string | number;
     title: string;
     description?: string;
     provider: string;
     category: string;
     duration: string;
+    imageSrc?: string;
+    rating?: number;
+    students?: number;
+    featured?: boolean;
+    new?: boolean;
+    popular?: boolean;
   };
   index: number;
   showBookmark?: boolean;
@@ -54,7 +60,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
     >
       <div className="relative h-48 overflow-hidden">
         <img 
-          src={program.imageSrc} 
+          src={program.imageSrc || "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=600&q=80"} 
           alt={program.title} 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
@@ -96,7 +102,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
           </Badge>
           <div className="flex items-center text-sm text-amber-500 font-medium">
             <Star size={16} className="fill-amber-400 mr-1" />
-            {program.rating}
+            {program.rating || 4.5}
           </div>
         </div>
         <CardTitle className="text-lg font-semibold line-clamp-2 mb-1">{program.title}</CardTitle>
@@ -108,7 +114,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
       <CardContent className="p-4 pt-2">
         <div className="flex items-center text-sm text-gray-500 mt-2">
           <Users size={15} className="mr-1" />
-          <span>{program.students.toLocaleString()} students enrolled</span>
+          <span>{(program.students || 0).toLocaleString()} students enrolled</span>
         </div>
       </CardContent>
       
