@@ -36,7 +36,7 @@ interface ProgramCardProps {
 
 // Generate a color for each card based on the index
 const getCardColor = (index: number) => {
-  const colors = ['card-yellow', 'card-purple', 'card-orange', 'card-teal'];
+  const colors = ['card-purple', 'card-pink', 'card-blue', 'card-green'];
   return colors[index % colors.length];
 };
 
@@ -60,7 +60,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
   return (
     <Card 
       className={cn(
-        "h-full overflow-hidden group transition-all duration-300 border-0 shadow-lg animate-scale-in",
+        "h-full overflow-hidden group transition-all duration-300 border-0 shadow-lg animate-scale-in glow-effect",
         cardColor
       )}
       style={{ 
@@ -72,12 +72,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
         <div className="flex justify-between items-start">
           <Badge 
             variant="outline" 
-            className={cn(
-              "text-xs font-medium rounded-full px-3 py-1 mb-2",
-              cardColor === 'card-yellow' || cardColor === 'card-teal' || cardColor === 'card-purple' 
-                ? "bg-darkbg text-white border-darkbg" 
-                : "bg-white text-darkbg border-white"
-            )}
+            className="text-xs font-medium rounded-full px-3 py-1 mb-2 bg-white/10 text-white border-white/20"
           >
             {program.category}
           </Badge>
@@ -94,23 +89,13 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
           {program.title}
         </CardTitle>
         
-        <CardDescription className={cn(
-          "text-sm flex items-center gap-1",
-          cardColor === 'card-yellow' || cardColor === 'card-teal' || cardColor === 'card-purple' 
-            ? "text-darkbg/80" 
-            : "text-white/80"
-        )}>
+        <CardDescription className="text-sm flex items-center gap-1 text-white/80">
           {program.provider}
         </CardDescription>
       </CardHeader>
       
       <CardContent className="p-4 pt-0">
-        <div className={cn(
-          "flex items-center text-sm",
-          cardColor === 'card-yellow' || cardColor === 'card-teal' || cardColor === 'card-purple' 
-            ? "text-darkbg/70" 
-            : "text-white/70"
-        )}>
+        <div className="flex items-center text-sm text-white/70">
           <Clock size={15} className="mr-2" />
           <span className="mr-4">{program.duration}</span>
           
@@ -121,13 +106,8 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
       
       <CardFooter className="p-4 pt-2">
         <Button 
-          variant={cardColor === 'card-orange' ? "outline" : "default"}
-          className={cn(
-            "w-full transition-all duration-300 flex items-center gap-2 font-medium rounded-full",
-            cardColor === 'card-yellow' || cardColor === 'card-teal' || cardColor === 'card-purple' 
-              ? "bg-darkbg hover:bg-darkbg/80 text-white" 
-              : "bg-white hover:bg-white/90 text-darkbg border-white"
-          )}
+          variant="outline"
+          className="w-full transition-all duration-300 flex items-center gap-2 font-medium rounded-full bg-white/10 hover:bg-white/20 text-white border-white/20"
           onClick={handleViewProgram}
         >
           Ver Programa
@@ -137,12 +117,7 @@ const ProgramCard = ({ program, index, showBookmark = false }: ProgramCardProps)
       
       {showBookmark && (
         <button 
-          className={cn(
-            "absolute top-3 right-3 p-1.5 rounded-full transition-colors z-20",
-            cardColor === 'card-yellow' || cardColor === 'card-teal' || cardColor === 'card-purple' 
-              ? "bg-darkbg text-white hover:bg-darkbg/80" 
-              : "bg-white text-darkbg hover:bg-white/90"
-          )}
+          className="absolute top-3 right-3 p-1.5 rounded-full transition-colors z-20 bg-white/10 text-white hover:bg-white/20"
           onClick={handleBookmark}
           aria-label="Bookmark program"
         >

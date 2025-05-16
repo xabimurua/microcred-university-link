@@ -67,30 +67,40 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				// New theme colors based on the image
-				yellow: {
-					DEFAULT: '#F4D03F',
-					light: '#FCF3CF',
-					dark: '#D4AC0D',
-				},
 				purple: {
-					DEFAULT: '#9B59B6',
-					light: '#D7BDE2',
-					dark: '#8E44AD',
+					DEFAULT: '#8B5CF6', // Bright purple
+					light: '#A78BFA',
+					dark: '#6D28D9',
+				},
+				pink: {
+					DEFAULT: '#EC4899',
+					light: '#F9A8D4',
+					dark: '#DB2777',
+				},
+				blue: {
+					DEFAULT: '#3B82F6',
+					light: '#93C5FD',
+					dark: '#2563EB',
+				},
+				green: {
+					DEFAULT: '#10B981',
+					light: '#6EE7B7',
+					dark: '#059669',
+				},
+				yellow: {
+					DEFAULT: '#F59E0B',
+					light: '#FCD34D',
+					dark: '#D97706',
 				},
 				orange: {
-					DEFAULT: '#E74C3C',
-					light: '#F5B7B1',
-					dark: '#C0392B',
-				},
-				teal: {
-					DEFAULT: '#AED6F1',
-					light: '#D6EAF8',
-					dark: '#3498DB',
+					DEFAULT: '#F97316',
+					light: '#FDBA74',
+					dark: '#C2410C',
 				},
 				darkbg: {
-					DEFAULT: '#121212',
-					lighter: '#1E1E1E',
-					card: '#2D2D2D',
+					DEFAULT: '#0F172A', // Dark blue background
+					lighter: '#1E293B',
+					card: '#334155',
 				}
 			},
 			borderRadius: {

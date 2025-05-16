@@ -6,14 +6,14 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-white pt-16 pb-8">
+    <footer className="bg-darkbg-lighter text-white pt-16 pb-8">
       <div className="container px-4 mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           <div className="lg:col-span-2">
-            <a href="/" className="text-white font-semibold text-2xl tracking-tight mb-4 inline-block">
+            <a href="/" className="gradient-text font-semibold text-2xl tracking-tight mb-4 inline-block">
               MicroCred
             </a>
-            <p className="text-gray-300 mb-6 max-w-md">
+            <p className="text-white/70 mb-6 max-w-md">
               Connecting education with industry through specialized microcredentials that help professionals advance their careers and companies find qualified talent.
             </p>
             <div className="flex space-x-4">
@@ -50,16 +50,16 @@ const Footer = () => {
             <h4 className="font-semibold text-lg mb-4">Contact</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <Mail size={18} className="text-secondary flex-shrink-0 mt-1" />
-                <span className="text-gray-300">contact@microcred.com</span>
+                <Mail size={18} className="text-purple flex-shrink-0 mt-1" />
+                <span className="text-white/70">contact@microcred.com</span>
               </li>
               <li className="flex items-start gap-3">
-                <Phone size={18} className="text-secondary flex-shrink-0 mt-1" />
-                <span className="text-gray-300">(800) 123-4567</span>
+                <Phone size={18} className="text-purple flex-shrink-0 mt-1" />
+                <span className="text-white/70">(800) 123-4567</span>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-secondary flex-shrink-0 mt-1" />
-                <span className="text-gray-300">
+                <MapPin size={18} className="text-purple flex-shrink-0 mt-1" />
+                <span className="text-white/70">
                   100 Innovation Drive<br />
                   Silicon Valley, CA 94123
                 </span>
@@ -68,19 +68,19 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 pt-8">
+        <div className="border-t border-white/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
+            <p className="text-white/50 text-sm">
               &copy; {currentYear} MicroCred. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-white/50 hover:text-white text-sm transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-white/50 hover:text-white text-sm transition-colors">
                 Terms of Service
               </a>
-              <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <a href="#" className="text-white/50 hover:text-white text-sm transition-colors">
                 Cookie Policy
               </a>
             </div>
@@ -103,7 +103,7 @@ const SocialLink = ({ icon, href, label }: { icon: React.ReactNode; href: string
 
 const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
   <li>
-    <a href={href} className="text-gray-300 hover:text-white transition-colors">
+    <a href={href} className="text-white/70 hover:text-white transition-colors">
       {children}
     </a>
   </li>

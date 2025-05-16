@@ -1,5 +1,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,79 +8,52 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 217 91% 12%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 214 95% 68%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 174 88% 32%;
-    --accent-foreground: 210 40% 98%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 1rem;
-  }
-
-  /* Dark theme variables based on the image */
-  .dark {
-    --background: 0 0% 7%;
+    --background: 226 45% 11%;
     --foreground: 210 40% 98%;
 
-    --card: 0 0% 18%;
+    --card: 226 39% 18%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 12%;
+    --popover: 226 45% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 252 94% 66%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 45 100% 60%;
-    --secondary-foreground: 0 0% 12%;
+    --secondary: 333 71% 60%;
+    --secondary-foreground: 210 40% 98%;
 
-    --accent: 288 51% 53%;
+    --accent: 189 94% 43%;
     --accent-foreground: 210 40% 98%;
 
-    --muted: 0 0% 18%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 226 39% 25%;
+    --muted-foreground: 215 20.2% 75.1%;
 
     --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+    --border: 226 39% 25%;
+    --input: 226 39% 25%;
+    --ring: 252 94% 66%;
 
-  html {
-    @apply scroll-smooth;
+    --radius: 1rem;
   }
+}
 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
   body {
     @apply bg-darkbg text-foreground font-sans;
     overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight;
+    font-family: 'Poppins', sans-serif;
   }
 }
 
@@ -101,25 +75,38 @@
     text-wrap: balance;
   }
 
-  /* Card styles based on the image */
-  .card-yellow {
-    @apply bg-yellow rounded-xl p-4 text-darkbg;
-  }
-  
+  /* Card styles based on the new design */
   .card-purple {
-    @apply bg-purple-light rounded-xl p-4 text-darkbg;
+    @apply bg-purple rounded-xl p-4 text-white shadow-lg shadow-purple/20;
   }
   
-  .card-orange {
-    @apply bg-orange rounded-xl p-4 text-white;
+  .card-pink {
+    @apply bg-pink rounded-xl p-4 text-white shadow-lg shadow-pink/20;
   }
   
-  .card-teal {
-    @apply bg-teal rounded-xl p-4 text-darkbg;
+  .card-blue {
+    @apply bg-blue rounded-xl p-4 text-white shadow-lg shadow-blue/20;
+  }
+  
+  .card-green {
+    @apply bg-green rounded-xl p-4 text-white shadow-lg shadow-green/20;
   }
   
   .card-dark {
-    @apply bg-darkbg-card rounded-xl p-4 text-white border border-white/10;
+    @apply bg-darkbg-card rounded-xl p-4 text-white border border-white/10 shadow-lg;
+  }
+
+  .glow-effect {
+    @apply relative;
+  }
+  
+  .glow-effect::before {
+    content: "";
+    @apply absolute -inset-0.5 bg-gradient-to-r from-purple to-pink rounded-xl blur opacity-50 -z-10 transition-all duration-300;
+  }
+  
+  .glow-effect:hover::before {
+    @apply opacity-75;
   }
 }
 

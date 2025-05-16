@@ -11,6 +11,7 @@ import ProgramDetails from "./pages/ProgramDetails";
 import ForCompanies from "./pages/ForCompanies";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import "./App.css";
 
 const queryClient = new QueryClient();
 
@@ -21,14 +22,18 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/programs/:programId" element={<ProgramDetails />} />
-            <Route path="/for-companies" element={<ForCompanies />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className="app-container">
+            <div className="content-area">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/programs" element={<Programs />} />
+                <Route path="/programs/:programId" element={<ProgramDetails />} />
+                <Route path="/for-companies" element={<ForCompanies />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          </div>
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>

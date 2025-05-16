@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, X, UserCircle2 } from "lucide-react";
+import { Menu, X, UserCircle2, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, User } from "lucide-react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -55,7 +54,7 @@ const Navbar = () => {
     >
       <div className="container px-4 mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="text-white font-bold text-2xl tracking-tight">
+          <Link to="/" className="text-white font-bold text-2xl tracking-tight gradient-text">
             MicroCred
           </Link>
         </div>
@@ -73,7 +72,7 @@ const Navbar = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-10 w-10 rounded-full border border-white/20 bg-darkbg-lighter">
                   <Avatar className="h-9 w-9">
-                    <AvatarFallback className="bg-yellow text-darkbg">
+                    <AvatarFallback className="bg-purple text-white">
                       {user.email?.[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -96,7 +95,7 @@ const Navbar = () => {
                 Iniciar Sesión
               </Button>
               <Button 
-                className="bg-yellow text-darkbg hover:bg-yellow/90 transition-standard font-medium"
+                className="bg-gradient-to-r from-purple to-pink text-white hover:opacity-90 transition-standard font-medium glow-button"
                 onClick={() => navigate("/auth")}
               >
                 Registrarse
@@ -132,7 +131,7 @@ const Navbar = () => {
             <Button variant="outline" className="w-full border-white/20 text-white">
               Iniciar Sesión
             </Button>
-            <Button className="w-full bg-yellow text-darkbg hover:bg-yellow/90">
+            <Button className="w-full bg-gradient-to-r from-purple to-pink text-white hover:opacity-90">
               Registrarse
             </Button>
           </div>
@@ -159,13 +158,13 @@ const NavLink = ({
       <a 
         href={to} 
         className={cn(
-          "text-white/80 hover:text-yellow font-medium transition-standard relative group",
-          isActive && "text-yellow"
+          "text-white/80 hover:text-purple font-medium transition-standard relative group",
+          isActive && "text-purple"
         )}
       >
         {children}
         <span className={cn(
-          "absolute bottom-0 left-0 h-0.5 bg-yellow transition-all duration-300",
+          "absolute bottom-0 left-0 h-0.5 bg-purple transition-all duration-300",
           isActive ? "w-full" : "w-0 group-hover:w-full"
         )}></span>
       </a>
@@ -176,13 +175,13 @@ const NavLink = ({
     <Link 
       to={to} 
       className={cn(
-        "text-white/80 hover:text-yellow font-medium transition-standard relative group",
-        isActive && "text-yellow"
+        "text-white/80 hover:text-purple font-medium transition-standard relative group",
+        isActive && "text-purple"
       )}
     >
       {children}
       <span className={cn(
-        "absolute bottom-0 left-0 h-0.5 bg-yellow transition-all duration-300",
+        "absolute bottom-0 left-0 h-0.5 bg-purple transition-all duration-300",
         isActive ? "w-full" : "w-0 group-hover:w-full"
       )}></span>
     </Link>
@@ -207,7 +206,7 @@ const MobileNavLink = ({
         href={to} 
         className={cn(
           "text-xl font-medium py-2 transition-standard",
-          isActive ? "text-yellow" : "text-white"
+          isActive ? "text-purple" : "text-white"
         )}
       >
         {children}
@@ -220,7 +219,7 @@ const MobileNavLink = ({
       to={to} 
       className={cn(
         "text-xl font-medium py-2 transition-standard",
-        isActive ? "text-yellow" : "text-white"
+        isActive ? "text-purple" : "text-white"
       )}
     >
       {children}
