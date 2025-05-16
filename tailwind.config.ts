@@ -65,6 +65,32 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// New theme colors based on the image
+				yellow: {
+					DEFAULT: '#F4D03F',
+					light: '#FCF3CF',
+					dark: '#D4AC0D',
+				},
+				purple: {
+					DEFAULT: '#9B59B6',
+					light: '#D7BDE2',
+					dark: '#8E44AD',
+				},
+				orange: {
+					DEFAULT: '#E74C3C',
+					light: '#F5B7B1',
+					dark: '#C0392B',
+				},
+				teal: {
+					DEFAULT: '#AED6F1',
+					light: '#D6EAF8',
+					dark: '#3498DB',
+				},
+				darkbg: {
+					DEFAULT: '#121212',
+					lighter: '#1E1E1E',
+					card: '#2D2D2D',
 				}
 			},
 			borderRadius: {

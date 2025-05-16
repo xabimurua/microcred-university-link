@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -48,38 +49,38 @@ const Navbar = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled 
-          ? "bg-white/80 backdrop-blur-md border-b border-gray-200/50 py-3" 
-          : "bg-transparent py-5"
+          ? "bg-darkbg/90 backdrop-blur-md border-b border-white/10 py-3" 
+          : "bg-darkbg py-5"
       )}
     >
       <div className="container px-4 mx-auto flex items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="text-primary font-semibold text-2xl tracking-tight">
+          <Link to="/" className="text-white font-bold text-2xl tracking-tight">
             MicroCred
           </Link>
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
-          <NavLink to="/" currentPath={location.pathname}>Home</NavLink>
-          <NavLink to="/programs" currentPath={location.pathname}>Programs</NavLink>
-          <NavLink to="/for-companies" currentPath={location.pathname}>For Companies</NavLink>
-          <NavLink to="#about" currentPath={location.pathname}>About</NavLink>
+          <NavLink to="/" currentPath={location.pathname}>Inicio</NavLink>
+          <NavLink to="/programs" currentPath={location.pathname}>Programas</NavLink>
+          <NavLink to="/for-companies" currentPath={location.pathname}>Empresas</NavLink>
+          <NavLink to="#about" currentPath={location.pathname}>Acerca de</NavLink>
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>
+                <Button variant="ghost" className="relative h-10 w-10 rounded-full border border-white/20 bg-darkbg-lighter">
+                  <Avatar className="h-9 w-9">
+                    <AvatarFallback className="bg-yellow text-darkbg">
                       {user.email?.[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleLogout}>
+              <DropdownMenuContent align="end" className="bg-darkbg-lighter border border-white/10">
+                <DropdownMenuItem onClick={handleLogout} className="text-white hover:text-white hover:bg-darkbg">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Cerrar Sesión</span>
                 </DropdownMenuItem>
@@ -89,13 +90,13 @@ const Navbar = () => {
             <>
               <Button 
                 variant="outline" 
-                className="transition-standard"
+                className="border-white/20 text-white hover:bg-white/10 transition-standard"
                 onClick={() => navigate("/auth")}
               >
                 Iniciar Sesión
               </Button>
               <Button 
-                className="bg-accent hover:bg-accent/90 transition-standard"
+                className="bg-yellow text-darkbg hover:bg-yellow/90 transition-standard font-medium"
                 onClick={() => navigate("/auth")}
               >
                 Registrarse
@@ -105,7 +106,7 @@ const Navbar = () => {
         </div>
 
         <button 
-          className="md:hidden text-primary"
+          className="md:hidden text-white"
           onClick={toggleMobileMenu}
           aria-label="Toggle menu"
         >
@@ -115,24 +116,24 @@ const Navbar = () => {
 
       <div 
         className={cn(
-          "md:hidden fixed inset-0 top-[60px] bg-white z-40 transition-all duration-300 ease-in-out",
+          "md:hidden fixed inset-0 top-[60px] bg-darkbg z-40 transition-all duration-300 ease-in-out",
           mobileMenuOpen 
             ? "opacity-100 pointer-events-auto" 
             : "opacity-0 pointer-events-none -translate-y-4"
         )}
       >
         <div className="container flex flex-col p-6 space-y-6 animate-fade-in">
-          <MobileNavLink to="/" currentPath={location.pathname}>Home</MobileNavLink>
-          <MobileNavLink to="/programs" currentPath={location.pathname}>Programs</MobileNavLink>
-          <MobileNavLink to="/for-companies" currentPath={location.pathname}>For Companies</MobileNavLink>
-          <MobileNavLink to="#about" currentPath={location.pathname}>About</MobileNavLink>
+          <MobileNavLink to="/" currentPath={location.pathname}>Inicio</MobileNavLink>
+          <MobileNavLink to="/programs" currentPath={location.pathname}>Programas</MobileNavLink>
+          <MobileNavLink to="/for-companies" currentPath={location.pathname}>Empresas</MobileNavLink>
+          <MobileNavLink to="#about" currentPath={location.pathname}>Acerca de</MobileNavLink>
           
-          <div className="pt-6 border-t border-gray-100 flex flex-col space-y-4">
-            <Button variant="outline" className="w-full">
-              Log In
+          <div className="pt-6 border-t border-white/10 flex flex-col space-y-4">
+            <Button variant="outline" className="w-full border-white/20 text-white">
+              Iniciar Sesión
             </Button>
-            <Button className="w-full bg-accent hover:bg-accent/90">
-              Get Started
+            <Button className="w-full bg-yellow text-darkbg hover:bg-yellow/90">
+              Registrarse
             </Button>
           </div>
         </div>
@@ -158,13 +159,13 @@ const NavLink = ({
       <a 
         href={to} 
         className={cn(
-          "text-primary/90 hover:text-accent font-medium transition-standard relative group",
-          isActive && "text-accent"
+          "text-white/80 hover:text-yellow font-medium transition-standard relative group",
+          isActive && "text-yellow"
         )}
       >
         {children}
         <span className={cn(
-          "absolute bottom-0 left-0 h-0.5 bg-accent transition-all duration-300",
+          "absolute bottom-0 left-0 h-0.5 bg-yellow transition-all duration-300",
           isActive ? "w-full" : "w-0 group-hover:w-full"
         )}></span>
       </a>
@@ -175,13 +176,13 @@ const NavLink = ({
     <Link 
       to={to} 
       className={cn(
-        "text-primary/90 hover:text-accent font-medium transition-standard relative group",
-        isActive && "text-accent"
+        "text-white/80 hover:text-yellow font-medium transition-standard relative group",
+        isActive && "text-yellow"
       )}
     >
       {children}
       <span className={cn(
-        "absolute bottom-0 left-0 h-0.5 bg-accent transition-all duration-300",
+        "absolute bottom-0 left-0 h-0.5 bg-yellow transition-all duration-300",
         isActive ? "w-full" : "w-0 group-hover:w-full"
       )}></span>
     </Link>
@@ -206,7 +207,7 @@ const MobileNavLink = ({
         href={to} 
         className={cn(
           "text-xl font-medium py-2 transition-standard",
-          isActive ? "text-accent" : "text-primary"
+          isActive ? "text-yellow" : "text-white"
         )}
       >
         {children}
@@ -219,7 +220,7 @@ const MobileNavLink = ({
       to={to} 
       className={cn(
         "text-xl font-medium py-2 transition-standard",
-        isActive ? "text-accent" : "text-primary"
+        isActive ? "text-yellow" : "text-white"
       )}
     >
       {children}
