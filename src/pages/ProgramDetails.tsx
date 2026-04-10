@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { programs } from "@/data/programs";
+import { useAuth } from "@/components/AuthProvider";
+import { useEnrollments } from "@/hooks/use-enrollments";
 import { 
   Star, 
   Clock, 
@@ -47,9 +49,13 @@ import { cn } from "@/lib/utils";
 
 const ProgramDetails = () => {
   const { programId } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { isEnrolled, enroll, unenroll, loading: enrollLoading } = useEnrollments();
   const [program, setProgram] = useState(programs.find(p => p.id.toString() === programId));
   const [activeTab, setActiveTab] = useState("overview");
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [enrolling, setEnrolling] = useState(false);
   
   // Scroll to top when component mounts
   useEffect(() => {
@@ -187,11 +193,27 @@ const ProgramDetails = () => {
     });
   };
   
-  const handleEnroll = () => {
-    toast({
-      title: "Enrollment Successful",
-      description: `You've successfully enrolled in ${program.title}.`,
-    });
+  const enrolled = program ? isEnrolled(program.id) : false;
+
+  const handleEnroll = async () => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+    if (!program) return;
+    setEnrolling(true);
+    if (enrolled) {
+      const ok = await unenroll(program.id);
+      if (ok) toast({ title: "Inscripción cancelada", description: `Has cancelado tu inscripción en ${program.title}.` });
+    } else {
+      const ok = await enroll(program.id);
+      if (ok) {
+        toast({ title: "¡Inscripción exitosa!", description: `Te has inscrito en ${program.title}. Ve a tu dashboard para continuar.` });
+      } else {
+        toast({ variant: "destructive", title: "Error", description: "No se pudo completar la inscripción. Inténtalo de nuevo." });
+      }
+    }
+    setEnrolling(false);
   };
 
   return (
@@ -234,8 +256,8 @@ const ProgramDetails = () => {
                 </p>
                 
                 <div className="flex items-center gap-3 mb-8">
-                  <Button onClick={handleEnroll} size="lg">
-                    Enroll Now
+                  <Button onClick={handleEnroll} size="lg" disabled={enrolling || enrollLoading} variant={enrolled ? "outline" : "default"}>
+                    {enrolling ? "Procesando..." : enrolled ? "✓ Inscrito — Cancelar" : user ? "Inscribirme" : "Iniciar sesión para inscribirme"}
                   </Button>
                   
                   <Button 
@@ -298,8 +320,8 @@ const ProgramDetails = () => {
                       </li>
                     </ul>
                     
-                    <Button onClick={handleEnroll} className="w-full">
-                      Enroll Now
+                    <Button onClick={handleEnroll} className="w-full" disabled={enrolling || enrollLoading} variant={enrolled ? "outline" : "default"}>
+                      {enrolling ? "Procesando..." : enrolled ? "✓ Ya inscrito" : "Inscribirme ahora"}
                     </Button>
                   </div>
                 </div>

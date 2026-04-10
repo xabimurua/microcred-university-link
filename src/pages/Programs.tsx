@@ -22,13 +22,13 @@ import Footer from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import ProgramCard from "@/components/ProgramCard";
-import { 
-  Pagination, 
-  PaginationContent, 
-  PaginationItem, 
-  PaginationLink, 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
   PaginationNext,
-  PaginationPrevious 
+  PaginationPrevious
 } from "@/components/ui/pagination";
 import {
   Sheet,
@@ -38,7 +38,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { supabase } from "@/integrations/supabase/client";
+import { programs as allPrograms } from "@/data/programs";
 
 const Programs = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,25 +58,7 @@ const Programs = () => {
     provider: null
   });
   const [showMobileFilters, setShowMobileFilters] = useState(false);
-  const [programs, setPrograms] = useState([]);
-
-  useEffect(() => {
-    const fetchPrograms = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('courses')
-          .select('*')
-          .order('created_at', { ascending: false });
-          
-        if (error) throw error;
-        setPrograms(data || []);
-      } catch (error) {
-        console.error('Error fetching programs:', error);
-      }
-    };
-
-    fetchPrograms();
-  }, []);
+  const programs = allPrograms;
 
   const getFilteredPrograms = () => {
     return programs.filter(program => {

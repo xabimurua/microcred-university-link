@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Menu, X, UserCircle2, LogOut, User } from "lucide-react";
+import { Menu, X, LogOut, User, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -78,8 +78,20 @@ const Navbar = () => {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-darkbg-lighter border border-white/10">
-                <DropdownMenuItem onClick={handleLogout} className="text-white hover:text-white hover:bg-darkbg">
+              <DropdownMenuContent align="end" className="bg-darkbg-lighter border border-white/10 min-w-[160px]">
+                <DropdownMenuItem asChild className="text-white hover:text-white hover:bg-darkbg cursor-pointer">
+                  <Link to="/dashboard">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Mi Dashboard</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="text-white hover:text-white hover:bg-darkbg cursor-pointer">
+                  <Link to="/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Mi Perfil</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="text-white hover:text-white hover:bg-darkbg cursor-pointer">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Cerrar Sesión</span>
                 </DropdownMenuItem>
@@ -128,12 +140,24 @@ const Navbar = () => {
           <MobileNavLink to="#about" currentPath={location.pathname}>Acerca de</MobileNavLink>
           
           <div className="pt-6 border-t border-white/10 flex flex-col space-y-4">
-            <Button variant="outline" className="w-full border-white/20 text-white">
-              Iniciar Sesión
-            </Button>
-            <Button className="w-full bg-gradient-to-r from-purple to-pink text-white hover:opacity-90">
-              Registrarse
-            </Button>
+            {user ? (
+              <>
+                <MobileNavLink to="/dashboard" currentPath={location.pathname}>Mi Dashboard</MobileNavLink>
+                <MobileNavLink to="/profile" currentPath={location.pathname}>Mi Perfil</MobileNavLink>
+                <Button variant="outline" className="w-full border-white/20 text-white" onClick={handleLogout}>
+                  Cerrar Sesión
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" className="w-full border-white/20 text-white" onClick={() => navigate("/auth")}>
+                  Iniciar Sesión
+                </Button>
+                <Button className="w-full bg-gradient-to-r from-purple to-pink text-white hover:opacity-90" onClick={() => navigate("/auth")}>
+                  Registrarse
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
