@@ -55,7 +55,7 @@ const Auth = () => {
           description: "Por favor verifica tu correo electrónico para continuar.",
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         variant: "destructive",
         title: "Error",
